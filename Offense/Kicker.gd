@@ -7,7 +7,7 @@ var angle : float = 0.0 # radians
 var lift : float = 0.0 # radians
 
 var max_lift : float = PI / 6
-var force_mult : float = 1500.0
+var force_mult : float = 1800.0
 var max_angle : float = PI / 3
 
 const MASS : float = 2.0

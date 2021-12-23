@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Field Assets/Grass.png" type="Texture" id=1]
 [ext_resource path="res://Test.gd" type="Script" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://Field Assets/ScreenEffects.tscn" type="PackedScene" id=6]
 [ext_resource path="res://Offense/Kicker.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Ball/Ball.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Debug/Debug.tscn" type="PackedScene" id=9]
 
 [node name="Test" type="Node2D"]
 script = ExtResource( 2 )
@@ -24,7 +25,7 @@ texture = ExtResource( 3 )
 current = true
 
 [node name="Goal" parent="." instance=ExtResource( 4 )]
-position = Vector2( 0, -348 )
+position = Vector2( 0, -372 )
 
 [node name="Cameras&Signs" type="Sprite" parent="."]
 position = Vector2( 0, -328 )
@@ -38,3 +39,5 @@ position = Vector2( 0, 156 )
 
 [node name="Ball" parent="." instance=ExtResource( 8 )]
 position = Vector2( 0, 156 )
+
+[node name="Debug" parent="." instance=ExtResource( 9 )]
