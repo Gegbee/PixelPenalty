@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/impactSoft_heavy_001.ogg-c1a6097a643bd3b5b2a1bdc610c05c7b.oggstr"
+
+[deps]
+
+source_file="res://Sounds/impactSoft_heavy_001.ogg"
+dest_files=[ "res://.import/impactSoft_heavy_001.ogg-c1a6097a643bd3b5b2a1bdc610c05c7b.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

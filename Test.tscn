@@ -25,7 +25,7 @@ texture = ExtResource( 3 )
 current = true
 
 [node name="Goal" parent="." instance=ExtResource( 4 )]
-position = Vector2( 0, -372 )
+position = Vector2( 0, -246 )
 
 [node name="Cameras&Signs" type="Sprite" parent="."]
 position = Vector2( 0, -328 )

@@ -8,4 +8,4 @@ func add_debug_label(_name : String):
 	new_label.name = _name
 	
 func update_debug_label(_name, data):
-	$VBoxContainer.get_node(_name).text = str(_name + ": " + data)
+	$VBoxContainer.get_node(_name).text = _name + ": " + str(data)

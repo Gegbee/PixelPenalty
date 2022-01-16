@@ -1,50 +1,80 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://Goal/GoalLarge.png" type="Texture" id=1]
+[ext_resource path="res://Goal/Net.shader" type="Shader" id=1]
 [ext_resource path="res://Goal/Goal.gd" type="Script" id=2]
+[ext_resource path="res://Goal/GoalBottom.png" type="Texture" id=3]
+[ext_resource path="res://Goal/GoalTop.png" type="Texture" id=4]
+[ext_resource path="res://Goal/Net.png" type="Texture" id=5]
 
-[sub_resource type="CapsuleShape2D" id=1]
+[sub_resource type="ShaderMaterial" id=5]
+shader = ExtResource( 1 )
+shader_param/amplitude = 0.01
+shader_param/frequency = 10.0
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 41, 1 )
+
+[sub_resource type="CapsuleShape2D" id=2]
 radius = 1.00002
-height = 3.99995
-
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 41, 2 )
+height = 1.99996
 
 [sub_resource type="RectangleShape2D" id=3]
-extents = Vector2( 41, 2 )
+extents = Vector2( 41, 1 )
 
 [node name="Goal" type="Node2D"]
 scale = Vector2( 6, 6 )
 script = ExtResource( 2 )
 
-[node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, -0.5 )
-texture = ExtResource( 1 )
+[node name="BackNet" type="Polygon2D" parent="."]
+material = SubResource( 5 )
+texture = ExtResource( 5 )
+polygon = PoolVector2Array( -37, -42, -24, -42, -12, -42, 0, -42, 12, -42, 24, -42, 37, -42, 41, -38, 41, -24, 41, -12, 41, -2, 37, -8, 24, -8, 12, -8, 0, -8, -12, -8, -24, -8, -37, -8, -41, -2, -41, -12, -41, -24, -41, -38 )
 
-[node name="Line" type="StaticBody2D" parent="."]
-position = Vector2( 3.55271e-15, 21 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="GoalBottom" type="Sprite" parent="."]
+position = Vector2( 0, -21.5 )
+texture = ExtResource( 3 )
 
-[node name="PostLeft" type="CollisionShape2D" parent="Line"]
-position = Vector2( -42, -1 )
+[node name="GoalTop" type="Sprite" parent="."]
+position = Vector2( 0, -21.5 )
+texture = ExtResource( 4 )
+
+[node name="Lines" type="Node2D" parent="."]
+
+[node name="Front" type="Area2D" parent="Lines" groups=[
+"front",
+]]
+
+[node name="GoalLine" type="CollisionShape2D" parent="Lines/Front"]
+position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
-[node name="PostRight" type="CollisionShape2D" parent="Line"]
-position = Vector2( 42, -1 )
-shape = SubResource( 1 )
+[node name="Back" type="StaticBody2D" parent="Lines" groups=[
+"back",
+"net",
+]]
 
-[node name="GoalLine" type="CollisionShape2D" parent="Line"]
-position = Vector2( -3.55271e-15, -1 )
+[node name="Back" type="CollisionPolygon2D" parent="Lines/Back"]
+position = Vector2( 79, 2 )
+polygon = PoolVector2Array( -38, -9, -41, -13, -117, -13, -120, -9, -120, -5, -117, -10, -41, -10, -38, -5 )
+
+[node name="Posts" type="StaticBody2D" parent="Lines" groups=[
+"post",
+]]
+
+[node name="PostLeft" type="CollisionShape2D" parent="Lines/Posts"]
+position = Vector2( -42, 1 )
 shape = SubResource( 2 )
 
-[node name="Bar" type="StaticBody2D" parent="."]
-position = Vector2( -8.47033e-22, -13 )
-__meta__ = {
-"_edit_group_": true
-}
+[node name="PostRight" type="CollisionShape2D" parent="Lines/Posts"]
+position = Vector2( 42, 1 )
+shape = SubResource( 2 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bar"]
-position = Vector2( 8.47033e-22, -1 )
+[node name="Bar" type="StaticBody2D" parent="." groups=[
+"bar",
+]]
+position = Vector2( 0, -33 )
+
+[node name="Bar" type="CollisionShape2D" parent="Bar"]
+position = Vector2( -1.00974e-28, -1 )
 shape = SubResource( 3 )
+[connection signal="body_entered" from="Lines/Front" to="." method="_on_Front_body_entered"]

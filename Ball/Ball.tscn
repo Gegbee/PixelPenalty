@@ -1,28 +1,19 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Ball/Ball.png" type="Texture" id=1]
 [ext_resource path="res://Ball/Ball.gd" type="Script" id=2]
 [ext_resource path="res://Ball/Shadow.png" type="Texture" id=3]
 [ext_resource path="res://Ball/Ball1.png" type="Texture" id=4]
+[ext_resource path="res://Sounds/impactBell_heavy_000.ogg" type="AudioStream" id=5]
 [ext_resource path="res://Ball/Ball3.png" type="Texture" id=6]
+[ext_resource path="res://Sounds/footstep_grass_004.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Sounds/footstep_wood_002.ogg" type="AudioStream" id=8]
+[ext_resource path="res://Sounds/footstep_snow_004.ogg" type="AudioStream" id=9]
 
-[sub_resource type="ParticlesMaterial" id=3]
-flag_disable_z = true
-direction = Vector3( 0, -1, 0 )
-gravity = Vector3( 0, 98, 0 )
-initial_velocity = 30.0
-initial_velocity_random = 1.0
-angular_velocity = 10.0
-angular_velocity_random = 1.0
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-scale = 6.0
-color = Color( 0.596078, 0.878431, 0.509804, 1 )
-
-[sub_resource type="CircleShape2D" id=2]
+[sub_resource type="CircleShape2D" id=1]
 radius = 2.0
 
-[sub_resource type="SpriteFrames" id=1]
+[sub_resource type="SpriteFrames" id=2]
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
@@ -35,30 +26,40 @@ animations = [ {
 "speed": 4.0
 } ]
 
-[node name="BallContainer" type="Node2D"]
+[node name="BallContainer" type="KinematicBody2D" groups=[
+"ball",
+]]
 scale = Vector2( 6, 6 )
+z_index = 1
 script = ExtResource( 2 )
 
 [node name="Shadow" type="Sprite" parent="."]
-position = Vector2( 0, 1.5 )
 texture = ExtResource( 3 )
 
-[node name="Grass" type="Particles2D" parent="."]
-visible = false
-emitting = false
-amount = 6
-one_shot = true
-explosiveness = 1.0
-randomness = 0.4
-local_coords = false
-process_material = SubResource( 3 )
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
 
-[node name="Ball" type="Area2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Ball"]
-shape = SubResource( 2 )
+[node name="Ball" type="Node2D" parent="."]
 
 [node name="BallSprite" type="AnimatedSprite" parent="Ball"]
-frames = SubResource( 1 )
+frames = SubResource( 2 )
 animation = "rolling"
-[connection signal="body_entered" from="Ball" to="." method="_on_Ball_body_entered"]
+
+[node name="Bar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+pitch_scale = 0.9
+
+[node name="Net" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = -10.0
+pitch_scale = 0.4
+attenuation = 0.0099575
+
+[node name="Grass" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+pitch_scale = 0.6
+
+[node name="Foot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+volume_db = 10.0
+pitch_scale = 0.76
