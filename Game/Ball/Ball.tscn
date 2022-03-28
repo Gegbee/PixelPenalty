@@ -1,0 +1,67 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://Game/Ball/Ball.png" type="Texture" id=1]
+[ext_resource path="res://Game/Ball/Ball.gd" type="Script" id=2]
+[ext_resource path="res://Game/Ball/Shadow.png" type="Texture" id=3]
+[ext_resource path="res://Game/Ball/Ball1.png" type="Texture" id=4]
+[ext_resource path="res://Sounds/impactBell_heavy_000.ogg" type="AudioStream" id=5]
+[ext_resource path="res://Game/Ball/Ball3.png" type="Texture" id=6]
+[ext_resource path="res://Sounds/footstep_grass_004.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Sounds/footstep_wood_002.ogg" type="AudioStream" id=8]
+[ext_resource path="res://Sounds/footstep_snow_004.ogg" type="AudioStream" id=9]
+
+[sub_resource type="CircleShape2D" id=1]
+radius = 2.0
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ), ExtResource( 6 ) ],
+"loop": true,
+"name": "rolling",
+"speed": 4.0
+} ]
+
+[node name="BallContainer" type="KinematicBody2D" groups=[
+"ball",
+]]
+scale = Vector2( 6, 6 )
+z_index = 1
+collision_layer = 3
+collision_mask = 3
+script = ExtResource( 2 )
+
+[node name="Shadow" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource( 1 )
+
+[node name="Ball" type="Node2D" parent="."]
+
+[node name="BallSprite" type="AnimatedSprite" parent="Ball"]
+frames = SubResource( 2 )
+animation = "rolling"
+
+[node name="Bar" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 5 )
+pitch_scale = 0.9
+
+[node name="Net" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 9 )
+volume_db = -10.0
+pitch_scale = 0.4
+attenuation = 0.0099575
+
+[node name="Grass" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 7 )
+pitch_scale = 0.6
+
+[node name="Foot" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource( 8 )
+volume_db = 10.0
+pitch_scale = 0.76

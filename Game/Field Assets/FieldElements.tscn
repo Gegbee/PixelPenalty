@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Game/Goal/Goal.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Game/Field Assets/Markings.png" type="Texture" id=3]
+[ext_resource path="res://Game/Field Assets/Cameras&Signs.png" type="Texture" id=4]
+[ext_resource path="res://Game/Field Assets/Grass.png" type="Texture" id=5]
+
+[node name="FieldElements" type="Node2D"]
+
+[node name="Field" type="Sprite" parent="."]
+scale = Vector2( 6, 6 )
+texture = ExtResource( 5 )
+
+[node name="Markings" type="Sprite" parent="."]
+scale = Vector2( 6, 6 )
+texture = ExtResource( 3 )
+
+[node name="Goal" parent="." instance=ExtResource( 2 )]
+position = Vector2( 0, -246 )
+
+[node name="Cameras&Signs" type="Sprite" parent="."]
+position = Vector2( 0, -328 )
+scale = Vector2( 6, 6 )
+texture = ExtResource( 4 )

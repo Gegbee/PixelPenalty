@@ -1,0 +1,24 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 uniform_color : hint_color = vec4(1.0); 
+uniform vec4 skin_color : hint_color = vec4(1.0); 
+uniform vec4 skin_shading : hint_color = vec4(0.0); 
+void fragment() {
+	COLOR = texture(TEXTURE, UV);
+	if (COLOR == vec4(1.0)) {
+		COLOR = uniform_color;
+	} else if (COLOR == vec4(1.0, 0.0, 0.0, 1.0)) {
+		COLOR = skin_color;
+	} else if (COLOR == vec4(0.0, 1.0, 0.0, 1.0)) {
+		COLOR = skin_color - skin_shading;
+	}
+}"
+
+[resource]
+shader = SubResource( 1 )
+shader_param/uniform_color = Color( 0.878431, 0.345098, 0.235294, 1 )
+shader_param/skin_color = Color( 0.572549, 0.380392, 0.313726, 1 )
+shader_param/skin_shading = Color( 0.129412, 0.117647, 0.117647, 0 )

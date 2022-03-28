@@ -1,0 +1,112 @@
+[gd_scene load_steps=19 format=2]
+
+[ext_resource path="res://Game/Kicker/KickerDefault.png" type="Texture" id=1]
+[ext_resource path="res://Game/Kicker/Kicker.gd" type="Script" id=2]
+[ext_resource path="res://Sounds/footstep_wood_002.ogg" type="AudioStream" id=3]
+[ext_resource path="res://Game/BluePlayer.tres" type="Material" id=4]
+[ext_resource path="res://Game/Kicker/KickerIdle/KickerIdle2.png" type="Texture" id=5]
+[ext_resource path="res://Game/Kicker/KickerIdle/KickerIdle3.png" type="Texture" id=6]
+[ext_resource path="res://Game/Kicker/KickerIdle/KickerIdle4.png" type="Texture" id=7]
+[ext_resource path="res://Game/Kicker/KickerIdle/KickerIdle1.png" type="Texture" id=8]
+[ext_resource path="res://Game/Kicker/KickerKick/KickerKick1.png" type="Texture" id=9]
+[ext_resource path="res://Game/Kicker/KickerKick/KickerKick3.png" type="Texture" id=10]
+[ext_resource path="res://Game/Kicker/KickerKick/KickerKick4.png" type="Texture" id=11]
+[ext_resource path="res://Game/Kicker/KickerKick/KickerKick5.png" type="Texture" id=12]
+[ext_resource path="res://Game/Shadow.shader" type="Shader" id=13]
+[ext_resource path="res://Game/Kicker/KickerKick/KickerKick2.png" type="Texture" id=14]
+
+[sub_resource type="Animation" id=4]
+resource_name = "Idle"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( -12, 6 ) ]
+}
+
+[sub_resource type="Animation" id=1]
+resource_name = "Kick"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.5 ),
+"transitions": PoolRealArray( 0.329877, 0.210224, 0.965936 ),
+"update": 0,
+"values": [ Vector2( -12, 6 ), Vector2( -8, 2 ), Vector2( -6, -1 ) ]
+}
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "default",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 8 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ],
+"loop": true,
+"name": "Idle",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ), ExtResource( 14 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ) ],
+"loop": false,
+"name": "Kick",
+"speed": 10.0
+} ]
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = ExtResource( 13 )
+shader_param/shadow_color = Color( 0, 0, 0, 0.176471 )
+shader_param/amount = 19
+
+[node name="Kicker" type="Node2D"]
+scale = Vector2( 6, 6 )
+script = ExtResource( 2 )
+
+[node name="OnionLine" type="Node2D" parent="."]
+
+[node name="Kick" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 3 )
+pitch_scale = 0.6
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/Idle = SubResource( 4 )
+anims/Kick = SubResource( 1 )
+
+[node name="KickTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="Sprite" type="Node2D" parent="."]
+position = Vector2( -12, 6 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="Sprite"]
+material = ExtResource( 4 )
+position = Vector2( 6, -9 )
+z_index = 2
+frames = SubResource( 2 )
+
+[node name="AnimatedShadow" type="AnimatedSprite" parent="Sprite"]
+material = SubResource( 3 )
+position = Vector2( 6.58256, 7.76474 )
+scale = Vector2( 1, 0.862352 )
+z_index = 2
+frames = SubResource( 2 )
+flip_v = true
+
+[node name="AITimer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+[connection signal="timeout" from="KickTimer" to="." method="_on_KickTimer_timeout"]
+[connection signal="animation_finished" from="Sprite/AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="animation_finished" from="Sprite/AnimatedShadow" to="." method="_on_AnimatedSprite_animation_finished"]
+[connection signal="timeout" from="AITimer" to="." method="_on_AITimer_timeout"]
