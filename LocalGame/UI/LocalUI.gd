@@ -16,34 +16,38 @@ var NONE_COLOR = "#ffffff"
 var colors = [NONE_COLOR, MISSED_COLOR, SCORED_COLOR]
 
 onready var blue_nodes = [
-	$MarginContainer/Control/SideUI/Atk/PointContainer/Point,
-	$MarginContainer/Control/SideUI/Atk/PointContainer/Point2,
-	$MarginContainer/Control/SideUI/Atk/PointContainer/Point3,
-	$MarginContainer/Control/SideUI/Atk/PointContainer/Point4,
-	$MarginContainer/Control/SideUI/Atk/PointContainer/Point5
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer/Point,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer/Point2,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer/Point3,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer/Point4,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer/Point5
 ]
 onready var red_nodes = [
-	$MarginContainer/Control/SideUI/Def/PointContainer2/Point,
-	$MarginContainer/Control/SideUI/Def/PointContainer2/Point2,
-	$MarginContainer/Control/SideUI/Def/PointContainer2/Point3,
-	$MarginContainer/Control/SideUI/Def/PointContainer2/Point4,
-	$MarginContainer/Control/SideUI/Def/PointContainer2/Point5
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer2/Point,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer2/Point2,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer2/Point3,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer2/Point4,
+	$MarginContainer/Control/CenterUI/ScoreBar/PointContainer2/Point5
 ]
 
-func updateScore(team : int, number : int, score : int):
-	if team == RED:
-		red_score[number - 1] = score
-		red_nodes[number - 1].modulate = colors[score]
-	else:
-		blue_score[number - 1] = score
-		blue_nodes[number - 1].modulate = colors[score]
+onready var timer_text = $MarginContainer/Control/Timer/Label
+onready var countdown_text = $MarginContainer/Control/CenterContainer/Label
 
+func updateScore(team : int, _round : int, score : int):
+	if team == RED:
+		red_score[_round] = score
+		red_nodes[_round].modulate = colors[score]
+	else:
+		blue_score[_round] = score
+		blue_nodes[_round].modulate = colors[score]
+	printScores()
+	
 func resetScores():
-	for number in range(0, len(red_score)):
-		red_score[number] = NONE
-		red_nodes[number].modulate = NONE_COLOR
-		blue_score[number] = NONE
-		blue_nodes[number].modulate = NONE_COLOR
+	for _round in range(0, len(red_score)):
+		red_score[_round] = NONE
+		red_nodes[_round].modulate = NONE_COLOR
+		blue_score[_round] = NONE
+		blue_nodes[_round].modulate = NONE_COLOR
 		
 func printScores():
 	print("Blue: " + str(blue_score))
@@ -52,4 +56,21 @@ func printScores():
 	
 func _ready():
 	resetScores()
-	printScores()
+
+func updateCountdown(time : float):
+	var new_text = str(ceil(time))
+	if new_text != countdown_text.text:
+		$AudioStreamPlayer.play()
+	countdown_text.text = new_text
+	
+func updateTime(time : float):
+	time = stepify(time, 0.1)
+	# time in seconds below ten seconds
+	# timer_text.text = "0" + str(floor(time)) + " : " + str("%0.2f" % (time - floor(time)))
+	timer_text.text = str(time)
+
+func toggleTime():
+	timer_text.get_parent().visible = not timer_text.get_parent().visible
+	
+func toggleCountdown():
+	countdown_text.visible = not countdown_text.visible

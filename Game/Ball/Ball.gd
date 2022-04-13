@@ -67,6 +67,7 @@ func _physics_process(delta):
 			$Ball/BallSprite.play('default')
 		if abs(vel.length()) < 10:
 			moving = false
+			get_tree().reload_current_scene()
 	else:
 		
 		$Ball/BallSprite.play('default')

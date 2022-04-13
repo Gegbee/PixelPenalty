@@ -2,6 +2,9 @@ extends Node2D
 
 var controller_id : int = 0
 
+var one_kick := true
+var kicked := false
+
 var force : float = 0.0 # 0 - 1
 var angle : float = 0.0 # radians
 var lift_angle : float = 0.0 # radians
@@ -55,11 +58,13 @@ func _input(event):
 	if event.device == controller_id:
 		force = Input.get_action_strength("Force")
 		if event.is_action_pressed("Kick"):
-			final_force = Input.get_action_strength("Force")
-			animated_sprite.play('Kick')
-			animated_shadow.play('Kick')
-			$AnimationPlayer.play("Kick")
-			$KickTimer.start(0.1)
+			if !one_kick or !kicked:
+				kicked = true
+				final_force = Input.get_action_strength("Force")
+				animated_sprite.play('Kick')
+				animated_shadow.play('Kick')
+				$AnimationPlayer.play("Kick")
+				$KickTimer.start(0.1)
 	
 func create_onions(amt : int):
 	for onion in amt:
@@ -68,8 +73,8 @@ func create_onions(amt : int):
 		onions.append(onion_instance)
 
 func _on_KickTimer_timeout():
-	# kick(final_force, angle, lift_angle)
-	randomKick(0.1)
+	kick(final_force, angle, lift_angle)
+	# randomKick(0.1)
 
 func _on_AnimatedSprite_animation_finished():
 	if animated_sprite.animation == 'Kick':
@@ -86,21 +91,11 @@ func kick(_force, _angle, _lift_angle):
 		-velocity * cos(_lift_angle) * cos(_angle), # Y
 		velocity * sin(_lift_angle) / 6 # Z
 	)
-	print(
-		" x: ", -velocity * cos(_lift_angle) * sin(_angle), # X
-		" y: ", -velocity * cos(_lift_angle) * cos(_angle), # Y
-		" z: ", velocity * sin(_lift_angle) / 6 # Z
-	)
-	
-	# x: 951.056516 y: -309.016994 z: 0
-	# x: -951.056516 y: -309.016994 z: 0
-	# x: -728.551559 y: -236.720751 z: 107.131268
-	# x: 728.551559 y: -236.720751 z: 107.131268
-	# x: -49.213657 y: -998.641199 z: 2.856631
-	# x: 429.513891 y: -902.897583 z: 2.856631
-	# x: -482.045755 y: -875.978377 z: 2.856631
-	# x: -16.261735 y: -865.28612 z: 83.50241
-	# x: -15.777826 y: -839.537343 z: 90.51214
+#	print(
+#		" x: ", -velocity * cos(_lift_angle) * sin(_angle), # X
+#		" y: ", -velocity * cos(_lift_angle) * cos(_angle), # Y
+#		" z: ", velocity * sin(_lift_angle) / 6 # Z
+#	)
 
 func randomKick(difficulty: float):
 	var angle_net_border = max_angle/1.7
@@ -126,11 +121,13 @@ func randomKick(difficulty: float):
 	
 func reset():
 	$AnimationPlayer.play("Idle")
+	kicked = false
 	
 func _on_AITimer_timeout():
-	reset()
-	get_parent().get_node("Ball").reset()
-	animated_sprite.play('Kick')
-	animated_shadow.play('Kick')
-	$AnimationPlayer.play("Kick")
-	$KickTimer.start(0.1)
+	pass
+#	reset()
+#	get_parent().get_node("Ball").reset()
+#	animated_sprite.play('Kick')
+#	animated_shadow.play('Kick')
+#	$AnimationPlayer.play("Kick")
+#	$KickTimer.start(0.1)

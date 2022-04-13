@@ -43,10 +43,12 @@ current = true
 
 [node name="Debug" parent="." instance=ExtResource( 5 )]
 
-[node name="PlayTimer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
 
 [node name="ScreenEffects" parent="." instance=ExtResource( 1 )]
 
 [node name="LocalUI" parent="." instance=ExtResource( 7 )]
 [connection signal="goal" from="FieldElements/Goal" to="." method="_on_Goal_goal"]
 [connection signal="no_goal" from="FieldElements/Goal" to="." method="_on_Goal_no_goal"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

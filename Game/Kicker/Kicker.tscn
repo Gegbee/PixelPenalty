@@ -15,7 +15,7 @@
 [ext_resource path="res://Game/Shadow.shader" type="Shader" id=13]
 [ext_resource path="res://Game/Kicker/KickerKick/KickerKick2.png" type="Texture" id=14]
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=1]
 resource_name = "Idle"
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:position")
@@ -30,8 +30,7 @@ tracks/0/keys = {
 "values": [ Vector2( -12, 6 ) ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "Kick"
+[sub_resource type="Animation" id=2]
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:position")
 tracks/0/interp = 1
@@ -45,7 +44,7 @@ tracks/0/keys = {
 "values": [ Vector2( -12, 6 ), Vector2( -8, 2 ), Vector2( -6, -1 ) ]
 }
 
-[sub_resource type="SpriteFrames" id=2]
+[sub_resource type="SpriteFrames" id=3]
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
@@ -63,7 +62,7 @@ animations = [ {
 "speed": 10.0
 } ]
 
-[sub_resource type="ShaderMaterial" id=3]
+[sub_resource type="ShaderMaterial" id=4]
 shader = ExtResource( 13 )
 shader_param/shadow_color = Color( 0, 0, 0, 0.176471 )
 shader_param/amount = 19
@@ -79,8 +78,8 @@ stream = ExtResource( 3 )
 pitch_scale = 0.6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/Idle = SubResource( 4 )
-anims/Kick = SubResource( 1 )
+anims/Idle = SubResource( 1 )
+anims/Kick = SubResource( 2 )
 
 [node name="KickTimer" type="Timer" parent="."]
 wait_time = 0.2
@@ -93,19 +92,18 @@ position = Vector2( -12, 6 )
 material = ExtResource( 4 )
 position = Vector2( 6, -9 )
 z_index = 2
-frames = SubResource( 2 )
+frames = SubResource( 3 )
 
 [node name="AnimatedShadow" type="AnimatedSprite" parent="Sprite"]
-material = SubResource( 3 )
+material = SubResource( 4 )
 position = Vector2( 6.58256, 7.76474 )
 scale = Vector2( 1, 0.862352 )
 z_index = 2
-frames = SubResource( 2 )
+frames = SubResource( 3 )
 flip_v = true
 
 [node name="AITimer" type="Timer" parent="."]
 wait_time = 5.0
-autostart = true
 [connection signal="timeout" from="KickTimer" to="." method="_on_KickTimer_timeout"]
 [connection signal="animation_finished" from="Sprite/AnimatedSprite" to="." method="_on_AnimatedSprite_animation_finished"]
 [connection signal="animation_finished" from="Sprite/AnimatedShadow" to="." method="_on_AnimatedSprite_animation_finished"]
